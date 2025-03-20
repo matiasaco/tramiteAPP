@@ -27,6 +27,6 @@ export const crearTramite = async (tramiteData) => {
   }
 };
 
-// Agrega más funciones según lo necesites
+
 
 export default api;

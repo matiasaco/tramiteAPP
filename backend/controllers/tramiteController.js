@@ -9,15 +9,42 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// Crear un nuevo trámite con los nuevos campos
 exports.crearTramite = (req, res) => {
-  const { usuario_id, tipo_pago, num_boletas, archivo } = req.body;
+  const { 
+    usuario_id, 
+    tipo_pago, 
+    num_boletas, 
+    archivo, 
+    nombre, 
+    apellido, 
+    dni, 
+    cuit, 
+    localidad 
+  } = req.body;
 
-  Tramite.create(usuario_id, tipo_pago, num_boletas, archivo, "pendiente", (err, result) => {
-    if (err) return res.status(500).json({ message: "Error al crear trámite" });
-    res.status(201).json({ message: "Trámite creado con éxito" });
-  });
+  // Crear un trámite con todos los campos
+  Tramite.create(
+    usuario_id, 
+    tipo_pago, 
+    num_boletas, 
+    archivo, 
+    nombre, 
+    apellido, 
+    dni, 
+    cuit, 
+    localidad, 
+    "pendiente",  // estado inicial
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: "Error al crear trámite" });
+      }
+      res.status(201).json({ message: "Trámite creado con éxito" });
+    }
+  );
 };
 
+// Obtener trámites de un usuario
 exports.obtenerTramites = (req, res) => {
   const { usuario_id, esAdmin } = req.user;
 
@@ -34,6 +61,7 @@ exports.obtenerTramites = (req, res) => {
   }
 };
 
+// Actualizar el estado de un trámite
 exports.actualizarEstado = (req, res) => {
   const { id } = req.params;
   const { estado, comentario, emailUsuario } = req.body;

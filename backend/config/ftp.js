@@ -1,7 +1,7 @@
 const ftp = require("basic-ftp");
 const dotenv = require("dotenv");
 
-dotenv.config();
+dotenv.config(); // Cargar variables de entorno
 
 const ftpClient = new ftp.Client();
 ftpClient.ftp.verbose = true;

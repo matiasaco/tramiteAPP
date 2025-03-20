@@ -14,7 +14,7 @@ app.use(cors());
 
 // Rutas (se agregarán después)
 app.use("/api/auth", require("./routes/authRoutes"));
-app.use("/api/tramites", require("./routes/tramiteRoutes"));
+app.use("/api/tramites", require("./routes/tramitesRoutes"));
 
 // Servidor
 const PORT = process.env.PORT || 5000;
