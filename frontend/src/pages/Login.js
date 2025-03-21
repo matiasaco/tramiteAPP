@@ -4,7 +4,7 @@ import axios from "axios";
 
 const Login = () => {
   const { login } = useContext(AuthContext);
-  const [form, setForm] = useState({ nombre: "", apellido: "", dni: "", email: "", cuit: "", telefono: "", direccion: "", contrasena: "", esAdmin: false, adminPin: "" });
+  const [form, setForm] = useState({ nombre: "", apellido: "", dni: "", email: "", cuit: "", telefono: "", direccion: "", contrasena: "", es_admin: false, adminPin: "" });
   const [isLogin, setIsLogin] = useState(true);
 
   const handleChange = (e) => {
@@ -46,10 +46,10 @@ const Login = () => {
           {!isLogin && (
             <div className="flex items-center mt-2">
               <label className="mr-2">¿Eres Administrador?</label>
-              <input type="checkbox" name="esAdmin" onChange={(e) => setForm({ ...form, esAdmin: e.target.checked })} />
+              <input type="checkbox" name="esAdmin" onChange={(e) => setForm({ ...form, es_admin: e.target.checked })} />
             </div>
           )}
-          {form.esAdmin && !isLogin && <input type="text" name="adminPin" placeholder="Pin de Administrador" onChange={handleChange} className="w-full p-2 mb-2 border" />}
+          {form.es_admin && !isLogin && <input type="text" name="adminPin" placeholder="Pin de Administrador" onChange={handleChange} className="w-full p-2 mb-2 border" />}
           <button type="submit" className="w-full bg-blue-500 text-white p-2 mt-2">{isLogin ? "Ingresar" : "Registrarse"}</button>
         </form>
         <button className="text-blue-500 mt-4" onClick={() => setIsLogin(!isLogin)}>

@@ -4,7 +4,7 @@ const User = {};
 
 User.create = (nombre, apellido, dni, email, cuit, telefono, direccion, contrasenaHash, esAdmin, callback) => {
   const query = `
-    INSERT INTO usuarios (nombre, apellido, dni, email, cuit, telefono, direccion, contrasena, esAdmin) 
+    INSERT INTO usuarios (nombre, apellido, dni, email, cuit, telefono, direccion, contrasena, es_admin) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
   
   db.query(query, [nombre, apellido, dni, email, cuit, telefono, direccion, contrasenaHash, esAdmin], callback);

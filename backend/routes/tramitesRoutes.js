@@ -1,6 +1,6 @@
 const express = require("express");
 const { crearTramite, obtenerTramites, actualizarEstado } = require("../controllers/tramiteController");
-const authMiddleware = require("../middleweres/authMiddlewere");
+const authMiddleware = require("../middlewares/authMiddleware");
 const { subirArchivoFTP } = require("../controllers/ftpController");
 const upload = require("../middlewares/uploadMiddleware");
 

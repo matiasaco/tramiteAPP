@@ -43,7 +43,7 @@ const AdminPanel = () => {
             <p><strong>Tipo:</strong> {tramite.tipo_pago}</p>
             <p><strong>Estado:</strong> {tramite.estado}</p>
             <p><strong>Comentario:</strong> {tramite.comentario || "Sin comentarios"}</p>
-            <a href={`http://tu-servidor-ftp.com/${tramite.archivo}`} className="text-blue-500" target="_blank" rel="noopener noreferrer">
+            <a href={`ftp://127.0.0.1/uploads/${tramite.archivo}`} className="text-blue-500" target="_blank" rel="noopener noreferrer">
               Descargar Archivo
             </a>
             <button onClick={() => setSelectedTramite(tramite)} className="btn-primary mt-2">Actualizar</button>

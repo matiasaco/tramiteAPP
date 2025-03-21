@@ -16,6 +16,8 @@ const Dashboard = () => {
     archivo: null,
   });
 
+  const [enviado, setEnviado] = useState(false); // Estado para el botón
+
   useEffect(() => {
     axios
       .get("http://localhost:5000/api/tramites", { headers: { Authorization: localStorage.getItem("token") } })
@@ -33,6 +35,8 @@ const Dashboard = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setEnviado(false); // Asegurar que el botón no esté en estado "enviado"
+
     const formData = new FormData();
     formData.append("nombre", nuevoTramite.nombre);
     formData.append("apellido", nuevoTramite.apellido);
@@ -47,7 +51,22 @@ const Dashboard = () => {
       await axios.post("http://localhost:5000/api/tramites/crear", formData, {
         headers: { Authorization: localStorage.getItem("token"), "Content-Type": "multipart/form-data" },
       });
+
       alert("Trámite enviado con éxito");
+      setNuevoTramite({
+        nombre: "",
+        apellido: "",
+        dni: "",
+        cuit: "",
+        localidad: "Campos Salles",
+        tipo_pago: "duplicado",
+        num_boletas: 1,
+        archivo: null,
+      });
+
+      setEnviado(true); // Cambiar el estado del botón a "enviado"
+
+      setTimeout(() => setEnviado(false), 3000); // Volver a su estado normal después de 3s
     } catch {
       alert("Error al enviar trámite");
     }
@@ -60,44 +79,16 @@ const Dashboard = () => {
 
       <form onSubmit={handleSubmit} className="mb-6 bg-gray-100 p-4 rounded">
         <label className="block">Nombre:</label>
-        <input
-          type="text"
-          name="nombre"
-          value={nuevoTramite.nombre}
-          onChange={handleChange}
-          className="input"
-          required
-        />
+        <input type="text" name="nombre" value={nuevoTramite.nombre} onChange={handleChange} className="input" required />
 
         <label className="block">Apellido:</label>
-        <input
-          type="text"
-          name="apellido"
-          value={nuevoTramite.apellido}
-          onChange={handleChange}
-          className="input"
-          required
-        />
+        <input type="text" name="apellido" value={nuevoTramite.apellido} onChange={handleChange} className="input" required />
 
         <label className="block">DNI:</label>
-        <input
-          type="text"
-          name="dni"
-          value={nuevoTramite.dni}
-          onChange={handleChange}
-          className="input"
-          required
-        />
+        <input type="text" name="dni" value={nuevoTramite.dni} onChange={handleChange} className="input" required />
 
         <label className="block">CUIT:</label>
-        <input
-          type="text"
-          name="cuit"
-          value={nuevoTramite.cuit}
-          onChange={handleChange}
-          className="input"
-          required
-        />
+        <input type="text" name="cuit" value={nuevoTramite.cuit} onChange={handleChange} className="input" required />
 
         <label className="block">Localidad:</label>
         <select name="localidad" value={nuevoTramite.localidad} onChange={handleChange} className="input" required>
@@ -121,24 +112,14 @@ const Dashboard = () => {
         </select>
 
         <label className="block">Cantidad de Boletas:</label>
-        <input
-          type="number"
-          name="num_boletas"
-          value={nuevoTramite.num_boletas}
-          onChange={handleChange}
-          className="input"
-          required
-        />
+        <input type="number" name="num_boletas" value={nuevoTramite.num_boletas} onChange={handleChange} className="input" required />
 
         <label className="block">Adjuntar Boletas (PDF):</label>
-        <input
-          type="file"
-          onChange={handleFileChange}
-          className="input"
-          required
-        />
+        <input type="file" onChange={handleFileChange} className="input" required />
 
-        <button type="submit" className="btn-primary mt-4">Enviar Trámite</button>
+        <button type="submit" className={`w-full p-2 mt-4 rounded ${enviado ? "bg-green-500" : "bg-blue-500"} text-white`}>
+          {enviado ? "✓" : "Enviar Trámite"}
+        </button>
       </form>
 
       <h3 className="text-xl font-semibold mb-2">Historial de Trámites</h3>
@@ -158,4 +139,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
