@@ -12,11 +12,13 @@ const transporter = nodemailer.createTransport({
 
 // Crear un nuevo trámite 
 exports.crearTramite = (req, res) => {
+  console.log("BODY:", req.body);
+  console.log("FILE:", req.file); // Verifica si llega el archivo
+
   const { 
     usuario_id, 
     tipo_pago, 
     num_boletas, 
-    archivo, 
     nombre, 
     apellido, 
     dni, 
@@ -24,20 +26,29 @@ exports.crearTramite = (req, res) => {
     localidad 
   } = req.body;
 
-  // Crear un trámite con todos los campos
+  // Verificar si se subió un archivo
+  const archivo = req.file ? req.file.filename : null;
+
+  // Validar que los campos obligatorios no estén vacíos
+  if (!usuario_id || !tipo_pago || !num_boletas || !nombre || !apellido || !dni || !cuit || !localidad) {
+    return res.status(400).json({ message: "Faltan datos obligatorios" });
+  }
+
+  // Crear el trámite en la base de datos
   Tramite.create(
     usuario_id, 
     tipo_pago, 
     num_boletas, 
-    archivo, 
+    archivo, // Ahora guarda el archivo correctamente
     nombre, 
     apellido, 
     dni, 
     cuit, 
     localidad, 
-    "pendiente",  // estado inicial
+    "pendiente",  // Estado inicial
     (err, result) => {
       if (err) {
+        console.error("Error al crear trámite:", err);
         return res.status(500).json({ message: "Error al crear trámite" });
       }
       res.status(201).json({ message: "Trámite creado con éxito" });

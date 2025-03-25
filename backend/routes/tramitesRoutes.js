@@ -7,6 +7,7 @@ const upload = require("../middlewares/uploadMiddleware");
 
 const router = express.Router();
 
+router.post("/crear", authMiddleware, upload.single("archivo"), crearTramite);
 router.post("/crear", authMiddleware, crearTramite);
 router.get("/", authMiddleware, obtenerTramites);
 router.put("/:id", authMiddleware, actualizarEstado);
