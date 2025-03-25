@@ -1,4 +1,5 @@
 const Tramite = require("../models/Tramite");
+const db =require("../config/db");
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
@@ -9,7 +10,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Crear un nuevo trámite con los nuevos campos
+// Crear un nuevo trámite 
 exports.crearTramite = (req, res) => {
   const { 
     usuario_id, 
@@ -46,9 +47,9 @@ exports.crearTramite = (req, res) => {
 
 // Obtener trámites de un usuario
 exports.obtenerTramites = (req, res) => {
-  const { usuario_id, esAdmin } = req.user;
+  const { usuario_id, es_admin } = req.user;
 
-  if (esAdmin) {
+  if (es_admin) {
     Tramite.findAll((err, results) => {
       if (err) return res.status(500).json({ message: "Error al obtener trámites" });
       res.json(results);

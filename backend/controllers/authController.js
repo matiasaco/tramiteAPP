@@ -3,16 +3,16 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 exports.register = (req, res) => {
-  const { nombre, apellido, dni, email, cuit, telefono, direccion, contrasena, esAdmin, adminPin } = req.body;
+  const { nombre, apellido, dni, email, cuit, telefono, direccion, contrasena, es_admin, adminPin } = req.body;
 
-  if (esAdmin && adminPin !== "123") {
+  if (es_admin && adminPin !== "123") {
     return res.status(403).json({ message: "Pin de administrador incorrecto" });
   }
 
   bcrypt.hash(contrasena, 10, (err, hash) => {
     if (err) return res.status(500).json({ message: "Error en la encriptación" });
 
-    User.create(nombre, apellido, dni, email, cuit, telefono, direccion, hash, esAdmin, (err, result) => {
+    User.create(nombre, apellido, dni, email, cuit, telefono, direccion, hash, es_admin, (err, result) => {
       if (err) return res.status(500).json({ message: "Error al registrar usuario" });
       res.status(201).json({ message: "Usuario registrado con éxito" });
     });
@@ -29,8 +29,8 @@ exports.login = (req, res) => {
     bcrypt.compare(contrasena, user.contrasena, (err, isMatch) => {
       if (!isMatch) return res.status(401).json({ message: "Contraseña incorrecta" });
 
-      const token = jwt.sign({ id: user.id, esAdmin: user.esAdmin }, process.env.JWT_SECRET, { expiresIn: "1h" });
-      res.json({ token, esAdmin: user.esAdmin });
+      const token = jwt.sign({ id: user.id, es_admin: user.es_admin }, process.env.JWT_SECRET, { expiresIn: "1h" });
+      res.json({ token, es_admin: user.es_admin });
     });
   });
 };

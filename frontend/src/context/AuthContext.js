@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data));
       setUser(res.data);
-      navigate(res.data.esAdmin ? "/admin" : "/dashboard");
+      navigate(res.data.es_admin ? "/admin" : "/dashboard");
     } catch (error) {
       alert("Error al iniciar sesión");
     }

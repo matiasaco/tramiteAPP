@@ -1,33 +1,29 @@
 const db = require("../config/db");
 
-const Tramite = {};
+const Tramite = {
+  create: (usuario_id, tipo_pago, num_boletas, archivo, nombre, apellido, dni, cuit, localidad, estado, callback) => {
+    const query = `
+      INSERT INTO tramites (usuario_id, tipo_pago, num_boletas, archivo, nombre, apellido, dni, cuit, localidad, estado) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
-Tramite.create = (usuario_id, tipo_pago, num_boletas, archivo, estado, callback) => {
-  const query = `
-    INSERT INTO tramites (usuario_id, tipo_pago, num_boletas, archivo, estado) 
-    VALUES (?, ?, ?, ?, ?)`;
-  
-  db.query(query, [usuario_id, tipo_pago, num_boletas, archivo, estado], callback);
-};
+    db.query(query, [usuario_id, tipo_pago, num_boletas, archivo, nombre, apellido, dni, cuit, localidad, estado], callback);
+  },
 
-Tramite.findAll = (callback) => {
-  const query = "SELECT * FROM tramites";
-  db.query(query, callback);
-};
+  findByUserId: (usuario_id, callback) => {
+    db.query("SELECT * FROM tramites WHERE usuario_id = ?", [usuario_id], callback);
+  },
 
-Tramite.findByUserId = (usuario_id, callback) => {
-  const query = "SELECT * FROM tramites WHERE usuario_id = ?";
-  db.query(query, [usuario_id], callback);
-};
+  findAll: (callback) => {
+    db.query("SELECT * FROM tramites", callback);
+  },
 
-Tramite.updateEstado = (id, estado, callback) => {
-  const query = "UPDATE tramites SET estado = ? WHERE id = ?";
-  db.query(query, [estado, id], callback);
-};
+  updateEstado: (id, estado, callback) => {
+    db.query("UPDATE tramites SET estado = ? WHERE id = ?", [estado, id], callback);
+  },
 
-Tramite.addComentario = (id, comentario, callback) => {
-  const query = "UPDATE tramites SET comentario = ? WHERE id = ?";
-  db.query(query, [comentario, id], callback);
+  addComentario: (id, comentario, callback) => {
+    db.query("UPDATE tramites SET comentario = ? WHERE id = ?", [comentario, id], callback);
+  },
 };
 
 module.exports = Tramite;
