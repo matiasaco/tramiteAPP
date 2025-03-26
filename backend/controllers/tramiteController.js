@@ -1,6 +1,7 @@
 const Tramite = require("../models/Tramite");
 const db =require("../config/db");
 const nodemailer = require("nodemailer");
+const { enviarEmail } = require("../services/emailServices");
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -68,11 +69,18 @@ exports.obtenerTramites = (req, res) => {
 };
 
 // Actualizar el estado de un trámite
-const { enviarEmail } = require("../services/emailServices");
+
 
 exports.actualizarEstado = (req, res) => {
   const { id } = req.params;
   const { estado, comentario, emailUsuario } = req.body;
+
+  console.log("🔹 Email del usuario recibido:", emailUsuario); // Agregar este log
+
+  if (!emailUsuario) {
+    console.error("❌ Error: No se recibió el email del usuario.");
+    return res.status(400).json({ message: "No se recibió el email del usuario." });
+  }
 
   Tramite.updateEstado(id, estado, (err, result) => {
     if (err) return res.status(500).json({ message: "Error al actualizar trámite" });
@@ -92,4 +100,3 @@ exports.actualizarEstado = (req, res) => {
     res.json({ message: "Estado actualizado y notificación enviada" });
   });
 };
-

@@ -17,19 +17,25 @@ const AdminPanel = () => {
   }, []);
 
   const actualizarTramite = async (id, emailUsuario) => {
+    console.log("🔹 Email enviado al backend:", emailUsuario); // Verificar si se está enviando
+  
     try {
-      await axios.put(
-        `http://localhost:5000/api/tramites/${id}`,
-        { estado, comentario, emailUsuario },
-        { headers: { Authorization: localStorage.getItem("token") } }
-      );
+      await axios.put(`http://localhost:5000/api/tramites/${id}`, {
+        estado,
+        comentario,
+        emailUsuario, // Asegurar que se envía correctamente
+      }, {
+        headers: { Authorization: localStorage.getItem("token") }
+      });
+  
       alert("Trámite actualizado y notificación enviada.");
       window.location.reload();
-    } catch {
-      alert("Error al actualizar el trámite.");
+    } catch (error) {
+      console.error("❌ Error al actualizar trámite:", error.response ? error.response.data : error.message);
+      alert("Error al actualizar trámite.");
     }
   };
-
+  
   return (
     <div className="container mx-auto p-8">
       <h2 className="text-2xl font-bold mb-4">Panel de Administración</h2>

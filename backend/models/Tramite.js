@@ -9,6 +9,19 @@ const Tramite = {
     db.query(query, [usuario_id, tipo_pago, num_boletas, archivo, nombre, apellido, dni, cuit, localidad, estado], callback);
   },
 
+  TramitefindById: (id, callback) => {
+    const query = `
+      SELECT tramites.*, usuarios.email AS emailUsuario
+      FROM tramites
+      JOIN usuarios ON tramites.usuario_id = usuarios.id
+      WHERE tramites.id = ?`;
+  
+    db.query(query, [id], (err, results) => {
+      if (err) return callback(err, null);
+      callback(null, results[0]);
+    });
+  },
+
   findByUserId: (usuario_id, callback) => {
     db.query("SELECT * FROM tramites WHERE usuario_id = ?", [usuario_id], callback);
   },
