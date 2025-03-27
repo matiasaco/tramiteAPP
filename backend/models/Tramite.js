@@ -11,10 +11,10 @@ const Tramite = {
 
   TramitefindById: (id, callback) => {
     const query = `
-      SELECT tramites.*, usuarios.email AS emailUsuario
-      FROM tramites
-      JOIN usuarios ON tramites.usuario_id = usuarios.id
-      WHERE tramites.id = ?`;
+      SELECT tramites.*, usuarios.email AS emailUsuario, tramites.comentario
+    FROM tramites
+    JOIN usuarios ON tramites.usuario_id = usuarios.id
+    WHERE tramites.id = ?`;
   
     db.query(query, [id], (err, results) => {
       if (err) return callback(err, null);

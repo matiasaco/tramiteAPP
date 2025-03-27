@@ -73,30 +73,61 @@ exports.obtenerTramites = (req, res) => {
 
 exports.actualizarEstado = (req, res) => {
   const { id } = req.params;
-  const { estado, comentario, emailUsuario } = req.body;
+  const { estado, comentario } = req.body;
 
-  console.log("🔹 Email del usuario recibido:", emailUsuario); // Agregar este log
+  // Actualizar estado y comentario
+  Tramite.updateEstado(id, estado, (err) => {
+    if (err) return res.status(500).json({ message: "Error al actualizar estado" });
 
-  if (!emailUsuario) {
-    console.error("❌ Error: No se recibió el email del usuario.");
-    return res.status(400).json({ message: "No se recibió el email del usuario." });
+    Tramite.addComentario(id, comentario, (err) => {
+      if (err) return res.status(500).json({ message: "Error al agregar comentario" });
+
+      // Buscar trámite con el email del usuario y el comentario
+      Tramite.TramitefindById(id, (err, tramite) => {
+        if (err || !tramite) return res.status(500).json({ message: "Error al obtener trámite" });
+
+        const emailOptions = {
+          from: process.env.EMAIL_USER,
+          to: tramite.emailUsuario,
+          subject: `Actualización de su Trámite #${id}`,
+          text: `Su trámite ha cambiado de estado a: ${estado}.\n\nComentario del Administrador: ${tramite.comentario || "Sin comentarios"}`
+        };
+
+        transporter.sendMail(emailOptions, (error, info) => {
+          if (error) {
+            console.error("❌ Error enviando correo:", error);
+            return res.status(500).json({ message: "No se pudo enviar el email" });
+          }
+          res.json({ message: "Estado y comentario actualizados, email enviado" });
+        });
+      });
+    });
+  });
+};
+
+
+
+// Eliminar un tramite 
+
+exports.eliminarTramite = (req, res) => {
+  const { id } = req.params;
+
+  // Verificar si el usuario es administrador
+  if (!req.user || !req.user.es_admin) {
+    return res.status(403).json({ message: "No tienes permisos para eliminar trámites" });
   }
 
-  Tramite.updateEstado(id, estado, (err, result) => {
-    if (err) return res.status(500).json({ message: "Error al actualizar trámite" });
-
-    if (comentario) {
-      Tramite.addComentario(id, comentario, (err) => {
-        if (err) return res.status(500).json({ message: "Error al agregar comentario" });
-      });
+  // Consulta SQL para eliminar el trámite
+  const sql = "DELETE FROM tramites WHERE id = ?";
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Error al eliminar trámite", error: err });
     }
 
-    // 📩 Enviar email al usuario notificando el cambio de estado
-    const asunto = "Actualización de su trámite";
-    const mensaje = `Su trámite ha sido actualizado a: ${estado}.\nComentarios: ${comentario || "Sin comentarios"}`;
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Trámite no encontrado" });
+    }
 
-    enviarEmail(emailUsuario, asunto, mensaje);
-
-    res.json({ message: "Estado actualizado y notificación enviada" });
+    res.status(200).json({ message: "Trámite eliminado correctamente" });
   });
 };

@@ -3,6 +3,8 @@ const { crearTramite, obtenerTramites, actualizarEstado } = require("../controll
 const authMiddleware = require("../middlewares/authMiddleware");
 const { subirArchivoFTP } = require("../controllers/ftpController");
 const upload = require("../middlewares/uploadMiddleware");
+const tramitesController = require("../controllers/tramiteController");
+
 
 
 const router = express.Router();
@@ -12,5 +14,6 @@ router.post("/crear", authMiddleware, crearTramite);
 router.get("/", authMiddleware, obtenerTramites);
 router.put("/:id", authMiddleware, actualizarEstado);
 router.post("/subir", upload.single("archivo"), subirArchivoFTP);
+router.delete("/:id", authMiddleware, tramitesController.eliminarTramite);
 
 module.exports = router;
