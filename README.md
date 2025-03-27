@@ -16,7 +16,7 @@ Este repositorio contiene el código fuente de TramitesAPP, una aplicación para
 ### 1️⃣ Clonar el Repositorio
 
 ```sh
-git clone https://github.com/tuusuario/tramitesapp.git
+git clone https://github.com/matiasaco/tramitesapp.git
 cd tramitesapp
 ```
 
