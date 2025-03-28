@@ -27,7 +27,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-login">
       <div className="bg-white p-8 rounded shadow-lg w-96">
         <h2 className="text-xl font-bold text-center">{isLogin ? "Iniciar Sesión" : "Registro"}</h2>
         <form onSubmit={handleSubmit} className="mt-4">
