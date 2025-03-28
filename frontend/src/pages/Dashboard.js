@@ -73,7 +73,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="container mx-auto p-8">
+    <div className="mx-auto p-8 bg-dashboard">
       <h2 className="text-2xl font-bold mb-4">Mis Trámites</h2>
       <button onClick={logout} className="bg-red-500 text-white px-4 py-2 rounded mb-4">Cerrar Sesión</button>
 
